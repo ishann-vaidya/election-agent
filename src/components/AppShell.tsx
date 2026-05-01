@@ -12,7 +12,7 @@ type AppShellProps = {
 export function AppShell({ navItems, children }: AppShellProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const navRailRef = useRef<HTMLElement | null>(null);
+  const navRailRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const navRail = navRailRef.current;
@@ -93,10 +93,9 @@ export function AppShell({ navItems, children }: AppShellProps) {
         </div>
 
         <div className="sidebar-note">
-          <Badge tone="gold">Day 1 scaffold</Badge>
+          <Badge tone="gold">Day 2 and Day 3 in progress</Badge>
           <p>
-            This first build sets up the app frame, shared styles, and route
-            placeholders.
+            Onboarding, dashboard personalization, chat memory, and civic tools now have working local data flows.
           </p>
         </div>
 
@@ -120,7 +119,7 @@ export function AppShell({ navItems, children }: AppShellProps) {
 
         <div className="sidebar-footer">
           <Button variant="secondary" fullWidth>
-            Firebase setup next
+            Firebase and Google APIs next
           </Button>
         </div>
       </aside>
@@ -136,8 +135,8 @@ export function AppShell({ navItems, children }: AppShellProps) {
           aria-expanded={isOpen}
           onClick={() => setIsOpen((value) => !value)}
         >
-            Menu
-          </Button>
+          Menu
+        </Button>
       </div>
 
       <main className="main-content">

@@ -7,17 +7,14 @@ export function HomePage() {
     <div className="page-stack">
       <section className="hero-panel">
         <div>
-          <p className="eyebrow">Day 1 foundation</p>
-          <h2>Set the project up before any feature work starts.</h2>
+          <p className="eyebrow">Current status</p>
+          <h2>The civic app now has onboarding, dashboard, chat, and tools flows.</h2>
           <p className="hero-copy">
-            This screen gives the app a clear starting point while the deeper
-            civic features are built over the next days.
+            The Day 1 shell is still intact, and the next two days now have real
+            local interactions instead of placeholders.
           </p>
         </div>
-        <div className="hero-actions">
-          <Button>Start the journey</Button>
-          <Button variant="secondary">See the plan</Button>
-        </div>
+        <Badge tone="green">Day 2 + Day 3 built</Badge>
       </section>
 
       <section className="card-grid">
@@ -26,17 +23,18 @@ export function HomePage() {
             Routes, layout, shared UI pieces, and a responsive frame now exist.
           </p>
         </Card>
-        <Card eyebrow="Next step" title="Connect the first real data">
+        <Card eyebrow="Next step" title="Connect live Google and Firebase services">
           <p>
-            After this, we can plug in onboarding state, Firestore, and the AI
-            guide.
+            After this, the app can swap the mock civic data for live APIs and
+            Firestore persistence.
           </p>
         </Card>
         <Card eyebrow="Current status" title="Safe to extend">
           <div className="inline-badges">
             <Badge tone="blue">Router</Badge>
             <Badge tone="green">Layout</Badge>
-            <Badge tone="gold">Design tokens</Badge>
+            <Badge tone="gold">Onboarding</Badge>
+            <Badge tone="blue">Chat memory</Badge>
           </div>
         </Card>
       </section>

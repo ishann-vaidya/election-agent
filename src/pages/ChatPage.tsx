@@ -1,29 +1,124 @@
+import { useEffect, useState } from 'react';
 import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { buildAssistantReply, buildCivicPlan, type UserProfile } from '../lib/electionPlanner';
+import { loadStoredChat, loadStoredProfile, saveStoredChat, type ChatMessage } from '../lib/storage';
+
+const quickPrompts = [
+  'What should I do first?',
+  'How do I check deadlines?',
+  'Can you explain absentee voting?',
+  'How do I find my polling place?',
+];
 
 export function ChatPage() {
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    const storedMessages = loadStoredChat();
+    return storedMessages.length > 0
+      ? storedMessages
+      : [
+          {
+            role: 'assistant',
+            content: 'I can help with registration, deadlines, polling places, and voting basics.',
+          },
+        ];
+  });
+  const [input, setInput] = useState('');
+
+  useEffect(() => {
+    setProfile(loadStoredProfile());
+  }, []);
+
+  useEffect(() => {
+    saveStoredChat(messages);
+  }, [messages]);
+
+  const plan = profile ? buildCivicPlan(profile) : null;
+
+  const sendMessage = (text: string) => {
+    const trimmed = text.trim();
+
+    if (!trimmed) {
+      return;
+    }
+
+    const reply = buildAssistantReply(trimmed, profile);
+    setMessages((current) => [
+      ...current,
+      { role: 'user', content: trimmed },
+      { role: 'assistant', content: reply },
+    ]);
+    setInput('');
+  };
+
   return (
     <div className="page-stack">
-      <Card eyebrow="AI guide" title="Conversation area placeholder">
-        <div className="chat-thread">
-          <div className="chat-bubble chat-bubble-user">
-            I just moved to a new state. What should I do first?
-          </div>
-          <div className="chat-bubble chat-bubble-assistant">
-            Start with registration, then check deadlines and polling places.
-          </div>
+      <section className="hero-panel chat-hero">
+        <div>
+          <p className="eyebrow">Day 2</p>
+          <h2>Conversation mode with a lightweight memory loop.</h2>
+          <p className="hero-copy">
+            The assistant remembers the current session, applies nonpartisan guardrails, and adapts to the profile saved in onboarding.
+          </p>
         </div>
-      </Card>
+        <Badge tone="green">{profile ? profile.state : 'No profile yet'}</Badge>
+      </section>
 
-      <section className="card-grid compact">
-        <Card eyebrow="Guardrails" title="Nonpartisan prompt">
-          <Badge tone="gold">Safety first</Badge>
-          <p>The assistant should explain, not push a political side.</p>
+      <section className="chat-layout">
+        <Card eyebrow="AI guide" title="Conversation area">
+          <div className="chat-thread">
+            {messages.map((message, index) => (
+              <div
+                key={`${message.role}-${index}-${message.content.slice(0, 18)}`}
+                className={`chat-bubble ${message.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-assistant'}`}
+              >
+                {message.content}
+              </div>
+            ))}
+          </div>
+
+          <form
+            className="chat-composer"
+            onSubmit={(event) => {
+              event.preventDefault();
+              sendMessage(input);
+            }}
+          >
+            <textarea
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Ask about deadlines, polling places, or voting basics"
+              rows={3}
+            />
+            <div className="hero-actions">
+              <Button type="submit">Send</Button>
+              <Button type="button" variant="secondary" onClick={() => setMessages(messages.slice(0, 1))}>
+                Clear thread
+              </Button>
+            </div>
+          </form>
+
+          <div className="section-pill-row">
+            {quickPrompts.map((prompt) => (
+              <Button key={prompt} type="button" variant="secondary" onClick={() => sendMessage(prompt)}>
+                {prompt}
+              </Button>
+            ))}
+          </div>
         </Card>
-        <Card eyebrow="Experience" title="Quick replies">
-          <Badge tone="blue">Chips later</Badge>
-          <p>We can add suggested prompts and typing states next.</p>
-        </Card>
+
+        <section className="card-grid compact">
+          <Card eyebrow="Guardrails" title="Nonpartisan prompt">
+            <Badge tone="gold">Safety first</Badge>
+            <p>The assistant explains voting logistics and declines partisan recommendations.</p>
+          </Card>
+          <Card eyebrow="Memory" title="Context available">
+            <Badge tone="blue">Session state</Badge>
+            <p>{plan ? `We have a profile for ${plan.title}.` : 'Save onboarding to personalize the replies.'}</p>
+          </Card>
+        </section>
       </section>
     </div>
   );
