@@ -20,6 +20,10 @@
 - I updated the home screen to reflect the new build status.
 - I fixed the TypeScript/Vite build environment by adding Node type definitions and a valid deprecation setting.
 - The project now builds successfully.
+- I replaced the sidebar with a top navigation bar across the whole app.
+- I removed build-progress language from the UI and rewrote the home page as a product overview.
+- I narrowed the mock civic flow to Maharashtra only.
+- I built the learning hub with a timeline, visual flow, quiz, and glossary.
 
 ## What this means
 - The app now has a real structure instead of only a plan.
@@ -29,6 +33,8 @@
 - The next stage can start on onboarding and dashboard logic.
 - Day 2 and Day 3 are now implemented with local state and mock civic data.
 - The remaining work is to swap the mock flows for live Firebase and Google API integrations.
+- The UI now has a cleaner top-nav layout and no longer shows internal build-progress status.
+- The app is now scoped to Maharashtra for the mock flow.
 
 ## API keys
 - No API keys are needed for the current build because the Google civic, maps, calendar, and chat flows are mocked locally.

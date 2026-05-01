@@ -7,13 +7,19 @@ import { loadStoredChat, loadStoredProfile, saveStoredChat, type ChatMessage } f
 
 const quickPrompts = [
   'What should I do first?',
-  'How do I check deadlines?',
+  'How do I check voter roll details?',
   'Can you explain absentee voting?',
-  'How do I find my polling place?',
+  'How do I find my polling booth?',
 ];
 
+const fallbackProfile: UserProfile = {
+  state: 'Maharashtra',
+  goal: 'Register to vote',
+  experience: 'first-time',
+};
+
 export function ChatPage() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfile>(fallbackProfile);
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const storedMessages = loadStoredChat();
     return storedMessages.length > 0
@@ -28,14 +34,14 @@ export function ChatPage() {
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    setProfile(loadStoredProfile());
+    setProfile(loadStoredProfile() ?? fallbackProfile);
   }, []);
 
   useEffect(() => {
     saveStoredChat(messages);
   }, [messages]);
 
-  const plan = profile ? buildCivicPlan(profile) : null;
+  const plan = buildCivicPlan(profile);
 
   const sendMessage = (text: string) => {
     const trimmed = text.trim();
@@ -57,13 +63,13 @@ export function ChatPage() {
     <div className="page-stack">
       <section className="hero-panel chat-hero">
         <div>
-          <p className="eyebrow">Day 2</p>
-          <h2>Conversation mode with a lightweight memory loop.</h2>
+          <p className="eyebrow">Ask anything</p>
+          <h2>Conversation mode with local memory and clear guardrails.</h2>
           <p className="hero-copy">
-            The assistant remembers the current session, applies nonpartisan guardrails, and adapts to the profile saved in onboarding.
+            The assistant remembers the current session, applies nonpartisan guardrails, and adapts to the Maharashtra profile saved in onboarding.
           </p>
         </div>
-        <Badge tone="green">{profile ? profile.state : 'No profile yet'}</Badge>
+        <Badge tone="green">Maharashtra</Badge>
       </section>
 
       <section className="chat-layout">
@@ -116,7 +122,7 @@ export function ChatPage() {
           </Card>
           <Card eyebrow="Memory" title="Context available">
             <Badge tone="blue">Session state</Badge>
-            <p>{plan ? `We have a profile for ${plan.title}.` : 'Save onboarding to personalize the replies.'}</p>
+            <p>We have a Maharashtra profile for the current session.</p>
           </Card>
         </section>
       </section>

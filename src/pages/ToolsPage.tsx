@@ -14,29 +14,24 @@ import { loadStoredProfile } from '../lib/storage';
 
 type LookupState = {
   address: string;
-  state: string;
+};
+
+const fallbackProfile: UserProfile = {
+  state: 'Maharashtra',
+  goal: 'Register to vote',
+  experience: 'first-time',
 };
 
 export function ToolsPage() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [lookup, setLookup] = useState<LookupState>({
-    address: '',
-    state: 'California',
-  });
+  const [profile, setProfile] = useState<UserProfile>(fallbackProfile);
+  const [lookup, setLookup] = useState<LookupState>({ address: '' });
 
   useEffect(() => {
     const savedProfile = loadStoredProfile();
-    setProfile(savedProfile);
-    if (savedProfile) {
-      setLookup({ address: '', state: savedProfile.state });
-    }
+    setProfile(savedProfile ?? fallbackProfile);
   }, []);
 
-  const activeProfile: UserProfile = profile ?? {
-    state: lookup.state,
-    goal: 'Register to vote',
-    experience: 'first-time',
-  };
+  const activeProfile: UserProfile = profile;
 
   const places = buildPollingPlaces(activeProfile, lookup.address);
   const calendarTarget = buildGoogleCalendarUrl({
@@ -57,31 +52,18 @@ export function ToolsPage() {
     <div className="page-stack">
       <section className="hero-panel tools-hero">
         <div>
-          <p className="eyebrow">Day 3</p>
-          <h2>Google Civic, Maps, and Calendar are scaffolded around local civic data.</h2>
+          <p className="eyebrow">Local tools</p>
+          <h2>Find polling booths and save reminders for Maharashtra.</h2>
           <p className="hero-copy">
             This page works without API keys for now by showing mock polling places, a map link, and calendar export actions. Live Google APIs can be wired in later.
           </p>
         </div>
-        <Badge tone="gold">API keys optional for live data</Badge>
+        <Badge tone="gold">Mock data only</Badge>
       </section>
 
       <section className="card-grid compact">
         <Card eyebrow="Lookup" title="Enter an address">
           <form className="lookup-form" onSubmit={(event) => event.preventDefault()}>
-            <label className="field-group">
-              <span>State</span>
-              <select
-                value={lookup.state}
-                onChange={(event) => setLookup((current) => ({ ...current, state: event.target.value }))}
-              >
-                {STATE_OPTIONS.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-            </label>
             <label className="field-group">
               <span>Street address</span>
               <input
@@ -90,6 +72,10 @@ export function ToolsPage() {
                 placeholder="123 Main St"
               />
             </label>
+            <div className="inline-badges">
+              <Badge tone="blue">Maharashtra</Badge>
+              <Badge tone="green">India focus</Badge>
+            </div>
           </form>
         </Card>
 

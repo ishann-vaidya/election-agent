@@ -7,14 +7,13 @@ import { Card } from '../components/ui/Card';
 import {
   EXPERIENCE_OPTIONS,
   GOAL_OPTIONS,
-  STATE_OPTIONS,
   type ExperienceLevel,
   type UserProfile,
 } from '../lib/electionPlanner';
 import { loadStoredProfile, saveStoredProfile } from '../lib/storage';
 
 const initialProfile: UserProfile = loadStoredProfile() ?? {
-  state: 'California',
+  state: 'Maharashtra',
   goal: 'Register to vote',
   experience: 'first-time',
 };
@@ -35,36 +34,27 @@ export function OnboardingPage() {
     <div className="page-stack">
       <section className="hero-panel onboarding-hero">
         <div>
-          <p className="eyebrow">Day 2</p>
-          <h2>Personalize the civic journey in three quick steps.</h2>
+          <p className="eyebrow">Get started</p>
+          <h2>Set up your Maharashtra voter guide in a few quick steps.</h2>
           <p className="hero-copy">
-            This setup now saves a user profile locally so the dashboard, chat,
-            and tools pages can adapt to the selected state and goal.
+            We only use Maharashtra for the mock flow right now, so the setup focuses on your goal and your level of familiarity.
           </p>
         </div>
-        <Badge tone={saved ? 'green' : 'gold'}>{saved ? 'Saved profile' : 'Ready to save'}</Badge>
+        <Badge tone="green">Maharashtra only</Badge>
       </section>
 
       <form className="onboarding-layout" onSubmit={handleSubmit}>
-        <Card eyebrow="Step 1" title="Choose your state">
-          <label className="field-group">
-            <span>State</span>
-            <select
-              value={profile.state}
-              onChange={(event) =>
-                setProfile((current) => ({ ...current, state: event.target.value }))
-              }
-            >
-              {STATE_OPTIONS.map((state) => (
-                <option key={state} value={state}>
-                  {state}
-                </option>
-              ))}
-            </select>
-          </label>
+        <Card eyebrow="Location" title="Mock state fixed to Maharashtra">
+          <p>
+            The project is now scoped to one Indian state for the mock flow so the UI and content stay focused.
+          </p>
+          <div className="inline-badges">
+            <Badge tone="blue">Maharashtra</Badge>
+            <Badge tone="gold">India focus</Badge>
+          </div>
         </Card>
 
-        <Card eyebrow="Step 2" title="Pick your goal">
+        <Card eyebrow="Step 1" title="Pick your goal">
           <div className="choice-grid">
             {GOAL_OPTIONS.map((goal) => (
               <label key={goal} className={`choice-chip ${profile.goal === goal ? 'choice-chip-active' : ''}`}>
@@ -83,7 +73,7 @@ export function OnboardingPage() {
           </div>
         </Card>
 
-        <Card eyebrow="Step 3" title="Tell us your experience">
+        <Card eyebrow="Step 2" title="Tell us your experience">
           <div className="choice-grid">
             {EXPERIENCE_OPTIONS.map((item) => (
               <label key={item.value} className={`choice-chip ${profile.experience === item.value ? 'choice-chip-active' : ''}`}>
@@ -109,7 +99,7 @@ export function OnboardingPage() {
           <div className="profile-preview">
             <div>
               <strong>{profile.state}</strong>
-              <p>State-specific deadlines and polling guidance.</p>
+              <p>Maharashtra-specific deadlines and booth guidance.</p>
             </div>
             <div>
               <strong>{profile.goal}</strong>
@@ -122,8 +112,8 @@ export function OnboardingPage() {
           </div>
           <div className="hero-actions">
             <Button type="submit">Save and continue</Button>
-            <Button variant="secondary" type="button" onClick={() => navigate('/chat')}>
-              Preview AI guide
+            <Button variant="secondary" type="button" onClick={() => navigate('/learn')}>
+              Explore the learning hub
             </Button>
           </div>
         </Card>

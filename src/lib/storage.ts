@@ -38,11 +38,23 @@ function writeJson<T>(key: string, value: T) {
 }
 
 export function loadStoredProfile(): UserProfile | null {
-  return readJson<UserProfile | null>(PROFILE_KEY, null);
+  const profile = readJson<UserProfile | null>(PROFILE_KEY, null);
+
+  if (!profile) {
+    return null;
+  }
+
+  return {
+    ...profile,
+    state: 'Maharashtra',
+  };
 }
 
 export function saveStoredProfile(profile: UserProfile) {
-  writeJson(PROFILE_KEY, profile);
+  writeJson(PROFILE_KEY, {
+    ...profile,
+    state: 'Maharashtra',
+  });
 }
 
 export function loadStoredProgress(): ProgressState {

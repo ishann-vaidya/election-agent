@@ -7,34 +7,50 @@ export function HomePage() {
     <div className="page-stack">
       <section className="hero-panel">
         <div>
-          <p className="eyebrow">Current status</p>
-          <h2>The civic app now has onboarding, dashboard, chat, and tools flows.</h2>
+          <p className="eyebrow">What ElectED does</p>
+          <h2>Help people understand voting, find local guidance, and stay ready.</h2>
           <p className="hero-copy">
-            The Day 1 shell is still intact, and the next two days now have real
-            local interactions instead of placeholders.
+            ElectED explains the voting process, helps users understand their options, and points them to practical actions like finding a booth or saving reminders.
           </p>
         </div>
-        <Badge tone="green">Day 2 + Day 3 built</Badge>
+        <div className="hero-actions">
+          <Button href="/onboarding">Start onboarding</Button>
+          <Button href="/learn" variant="secondary">Explore the learning hub</Button>
+        </div>
       </section>
 
       <section className="card-grid">
-        <Card eyebrow="What we built" title="The app shell is ready">
+        <Card eyebrow="Personal guidance" title="Tailored for the user">
           <p>
-            Routes, layout, shared UI pieces, and a responsive frame now exist.
+            The app starts with a simple setup flow and uses that to shape the dashboard, chat, and tools pages.
           </p>
         </Card>
-        <Card eyebrow="Next step" title="Connect live Google and Firebase services">
+        <Card eyebrow="Local tools" title="Find and save the important steps">
           <p>
-            After this, the app can swap the mock civic data for live APIs and
-            Firestore persistence.
+            Users can look up polling booth ideas, open map links, and export reminders into a calendar file.
           </p>
         </Card>
-        <Card eyebrow="Current status" title="Safe to extend">
+        <Card eyebrow="Learning hub" title="Understand the voting process">
+          <p>
+            The learning section covers a simple timeline, glossary, quiz, and visual explanation of the process.
+          </p>
+        </Card>
+        <Card eyebrow="India focus" title="Maharashtra mock data">
+          <p>
+            The current mock flow is scoped to Maharashtra so the content stays consistent while the live integrations are built later.
+          </p>
+        </Card>
+        <Card eyebrow="What comes next" title="Connect live services later">
+          <p>
+            Firebase and Google APIs can be added after the core experience is stable.
+          </p>
+        </Card>
+        <Card eyebrow="Ready to explore" title="Use the site">
           <div className="inline-badges">
-            <Badge tone="blue">Router</Badge>
-            <Badge tone="green">Layout</Badge>
-            <Badge tone="gold">Onboarding</Badge>
-            <Badge tone="blue">Chat memory</Badge>
+            <Badge tone="blue">Home</Badge>
+            <Badge tone="green">Onboarding</Badge>
+            <Badge tone="gold">Learn</Badge>
+            <Badge tone="blue">Tools</Badge>
           </div>
         </Card>
       </section>

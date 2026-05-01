@@ -5,17 +5,23 @@ import { Card } from '../components/ui/Card';
 import { buildChecklist, buildCivicPlan, buildDeadlines, type UserProfile } from '../lib/electionPlanner';
 import { loadStoredProfile, loadStoredProgress, saveStoredProgress } from '../lib/storage';
 
+const fallbackProfile: UserProfile = {
+  state: 'Maharashtra',
+  goal: 'Register to vote',
+  experience: 'first-time',
+};
+
 export function DashboardPage() {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfile>(fallbackProfile);
   const [progress, setProgress] = useState(loadStoredProgress());
 
   useEffect(() => {
-    setProfile(loadStoredProfile());
+    setProfile(loadStoredProfile() ?? fallbackProfile);
   }, []);
 
-  const plan = profile ? buildCivicPlan(profile) : null;
-  const checklist = profile ? buildChecklist(profile) : [];
-  const deadlines = profile ? buildDeadlines(profile) : [];
+  const plan = buildCivicPlan(profile);
+  const checklist = buildChecklist(profile);
+  const deadlines = buildDeadlines(profile);
   const completedCount = checklist.filter((item) => progress[item]).length;
   const progressPercent = checklist.length > 0 ? Math.round((completedCount / checklist.length) * 100) : 0;
 
@@ -27,24 +33,11 @@ export function DashboardPage() {
     });
   };
 
-  if (!profile || !plan) {
-    return (
-      <div className="page-stack">
-        <Card eyebrow="Dashboard" title="Finish onboarding first">
-          <p>
-            The dashboard needs a saved state, goal, and experience level before it can build a personalized checklist.
-          </p>
-          <Button onClick={() => (window.location.href = '/onboarding')}>Start onboarding</Button>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="page-stack">
       <section className="hero-panel dashboard-hero">
         <div>
-          <p className="eyebrow">Day 2</p>
+          <p className="eyebrow">Your guide</p>
           <h2>{plan.title}</h2>
           <p className="hero-copy">{plan.summary}</p>
         </div>

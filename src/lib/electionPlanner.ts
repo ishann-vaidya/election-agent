@@ -28,12 +28,7 @@ export type CivicPlan = {
 };
 
 export const STATE_OPTIONS = [
-  'California',
-  'Florida',
-  'Georgia',
-  'New York',
-  'Texas',
-  'Virginia',
+  'Maharashtra',
 ];
 
 export const GOAL_OPTIONS = [
@@ -50,106 +45,26 @@ export const EXPERIENCE_OPTIONS: Array<{ value: ExperienceLevel; label: string }
 ];
 
 const planMap: Record<string, CivicPlan> = {
-  California: {
-    title: 'California civic path',
-    summary: 'Fast-track registration, then confirm polling or vote-by-mail status.',
+  Maharashtra: {
+    title: 'Maharashtra civic path',
+    summary: 'Learn how to verify your voter record, find your booth, and plan voting day.',
     checklist: [
-      'Confirm your registration status with your current address',
-      'Check whether you are already on the vote-by-mail list',
-      'Save the county election office contact details',
-      'Review what ID or signature check your county uses',
+      'Confirm your name and address in the electoral roll',
+      'Check your polling booth and ward details',
+      'Save the local election office or helpline number',
+      'Review the documents you should carry to the booth',
     ],
     deadlines: [
-      { label: 'Registration check', date: '2026-09-15', detail: 'Confirm your address and party preference if needed.' },
-      { label: 'Mail ballot request', date: '2026-10-20', detail: 'Request or verify your ballot by mail if you want that path.' },
-      { label: 'Election day', date: '2026-11-03', detail: 'Plan your voting window and reminder schedule.' },
+      { label: 'Roll verification', date: '2026-09-15', detail: 'Check that your voter details are correct before the election period.' },
+      { label: 'Booth planning', date: '2026-10-15', detail: 'Save the polling station address and travel plan.' },
+      { label: 'Voting day', date: '2026-11-03', detail: 'Keep the day free and recheck your booth before you leave.' },
     ],
-    learningPillars: ['How vote-by-mail works', 'County election office basics', 'Find your polling place'],
-  },
-  Florida: {
-    title: 'Florida civic path',
-    summary: 'Registration and polling-day planning are the biggest early wins.',
-    checklist: [
-      'Verify your registration and party status',
-      'Check the early voting window for your county',
-      'Look up your polling location and travel time',
-      'Set reminders for ballot deadlines and election day',
-    ],
-    deadlines: [
-      { label: 'Registration deadline', date: '2026-10-05', detail: 'Make sure your voter record is current.' },
-      { label: 'Early voting window', date: '2026-10-20', detail: 'Plan the day you want to vote in person early.' },
-      { label: 'Election day', date: '2026-11-03', detail: 'Double-check your polling place before heading out.' },
-    ],
-    learningPillars: ['Early voting', 'Polling place lookup', 'Ballot tracking'],
-  },
-  Georgia: {
-    title: 'Georgia civic path',
-    summary: 'Focus on registration status, ID prep, and county-specific reminders.',
-    checklist: [
-      'Confirm your registration with county records',
-      'Check accepted ID forms before you go',
-      'Review absentee request timing if needed',
-      'Save your election office phone number',
-    ],
-    deadlines: [
-      { label: 'Registration deadline', date: '2026-10-06', detail: 'Last day to update your voter record for the cycle.' },
-      { label: 'Absentee request deadline', date: '2026-10-24', detail: 'Submit any mail ballot request before the cutoff.' },
-      { label: 'Election day', date: '2026-11-03', detail: 'Plan for in-person voting or ballot return.' },
-    ],
-    learningPillars: ['Photo ID basics', 'Absentee voting', 'County election contacts'],
-  },
-  'New York': {
-    title: 'New York civic path',
-    summary: 'Use the long lead time to understand your options and deadlines.',
-    checklist: [
-      'Confirm your enrollment and address',
-      'Review early vote locations in your borough or county',
-      'Save ballot delivery or drop-off info',
-      'Mark the key dates in your calendar',
-    ],
-    deadlines: [
-      { label: 'Registration deadline', date: '2026-10-09', detail: 'Submit changes before the cutoff.' },
-      { label: 'Early voting begins', date: '2026-10-24', detail: 'Choose an in-person slot that fits your schedule.' },
-      { label: 'Election day', date: '2026-11-03', detail: 'Confirm your polling place the day before.' },
-    ],
-    learningPillars: ['Early voting map', 'Ballot drop-off', 'Registration status'],
-  },
-  Texas: {
-    title: 'Texas civic path',
-    summary: 'Start with registration and then choose the most reliable voting route.',
-    checklist: [
-      'Check registration and county details',
-      'Identify the nearest polling location',
-      'Review absentee eligibility if travel is a factor',
-      'Set reminders for every important date',
-    ],
-    deadlines: [
-      { label: 'Registration deadline', date: '2026-10-05', detail: 'Confirm your record before the cutoff.' },
-      { label: 'Early voting window', date: '2026-10-20', detail: 'Pick a convenient day for in-person voting.' },
-      { label: 'Election day', date: '2026-11-03', detail: 'Leave buffer time in case lines are long.' },
-    ],
-    learningPillars: ['County lookup', 'Early vote planning', 'Ballot tracking'],
-  },
-  Virginia: {
-    title: 'Virginia civic path',
-    summary: 'Use flexible voting options and keep the reminders close.',
-    checklist: [
-      'Check your registration and district',
-      'Review early voting and absentee options',
-      'Find your nearest voting center',
-      'Save election office and reminder details',
-    ],
-    deadlines: [
-      { label: 'Registration deadline', date: '2026-10-13', detail: 'Update your registration if anything changed.' },
-      { label: 'Early voting begins', date: '2026-09-19', detail: 'Plan whether you want to vote early or on election day.' },
-      { label: 'Election day', date: '2026-11-03', detail: 'Verify your polling place before you go.' },
-    ],
-    learningPillars: ['Early voting', 'District lookup', 'Reminder planning'],
+    learningPillars: ['Voter roll basics', 'Booth lookup', 'Voting day planning'],
   },
 };
 
 export function buildCivicPlan(profile: UserProfile): CivicPlan {
-  return planMap[profile.state] ?? planMap['California'];
+  return planMap.Maharashtra;
 }
 
 export function buildChecklist(profile: UserProfile): string[] {
@@ -181,26 +96,26 @@ export function buildDeadlines(profile: UserProfile): DeadlineItem[] {
 }
 
 export function buildPollingPlaces(profile: UserProfile, address: string): PollingPlace[] {
-  const baseAddress = address.trim() || `${profile.state} voter address`;
+  const baseAddress = address.trim() || 'Maharashtra voter address';
 
   return [
     {
-      name: `${profile.state} Central Voting Center`,
-      address: `${baseAddress} - Downtown civic center`,
-      hours: '7:00 AM - 7:00 PM',
-      distance: '1.2 mi',
+      name: 'Mumbai South Polling Booth',
+      address: `${baseAddress} - Central civic school`,
+      hours: '7:00 AM - 6:00 PM',
+      distance: '1.2 km',
     },
     {
-      name: `${profile.state} Community Library`,
-      address: `${baseAddress} - Near the public library branch`,
-      hours: '8:00 AM - 6:00 PM',
-      distance: '2.8 mi',
+      name: 'Pune Cantonment Booth',
+      address: `${baseAddress} - Municipal community hall`,
+      hours: '7:00 AM - 6:00 PM',
+      distance: '2.8 km',
     },
     {
-      name: `${profile.state} Recreation Hall`,
-      address: `${baseAddress} - Neighborhood rec center`,
-      hours: '9:00 AM - 5:00 PM',
-      distance: '3.4 mi',
+      name: 'Nagpur Ward Office Booth',
+      address: `${baseAddress} - Ward office campus`,
+      hours: '7:00 AM - 6:00 PM',
+      distance: '3.4 km',
     },
   ];
 }
@@ -234,29 +149,29 @@ export function buildIcsContent(deadline: DeadlineItem): string {
 }
 
 export function buildMapUrl(profile: UserProfile, address: string): string {
-  const query = encodeURIComponent(`${address.trim() || profile.state} polling place`);
+  const query = encodeURIComponent(`${address.trim() || 'Maharashtra'} polling booth`);
   return `https://www.google.com/maps/search/${query}`;
 }
 
 export function buildAssistantReply(message: string, profile: UserProfile | null): string {
   const normalized = message.toLowerCase();
-  const state = profile?.state ?? 'your state';
+  const state = 'Maharashtra';
 
   if (normalized.includes('who should i vote for') || normalized.includes('which party should i choose')) {
     return 'I can help with registration, deadlines, and voting logistics, but I cannot recommend a candidate or party. If you want, I can explain how to compare ballot issues in ' + state + '.';
   }
 
   if (normalized.includes('first') || normalized.includes('start')) {
-    return `Start by confirming your registration in ${state}, then note the registration deadline and the nearest polling location.`;
+    return `Start by confirming your voter roll details in ${state}, then note your polling booth and voting day plan.`;
   }
 
   if (normalized.includes('absentee') || normalized.includes('mail')) {
-    return 'For mail voting, check eligibility first, then request the ballot early and track the return deadline.';
+    return 'For absentee or postal voting, check eligibility first, then request the ballot early and track the return deadline.';
   }
 
   if (normalized.includes('deadline')) {
-    return 'The fastest way to stay on track is to save the registration deadline, early voting window, and election day in one place.';
+    return 'The fastest way to stay on track is to save the roll check, booth details, and voting day in one place.';
   }
 
-  return 'I can help with election basics, deadlines, ballot logistics, and local voting steps. Tell me your state or the topic you want to understand next.';
+  return 'I can help with election basics, voter roll checks, booth details, and local voting steps. Tell me the topic you want to understand next.';
 }
