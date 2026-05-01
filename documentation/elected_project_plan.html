@@ -1,0 +1,435 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); }
+
+.plan-root { padding: 8px 0 24px; }
+
+.hero {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.hero-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+.hero-sub { font-size: 13px; color: var(--color-text-secondary); }
+.tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.tag {
+  font-size: 11px; font-weight: 500;
+  padding: 3px 10px; border-radius: 20px;
+  border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-secondary);
+}
+.tag.blue { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; }
+.tag.green { background: var(--color-background-success); color: var(--color-text-success); border-color: transparent; }
+.tag.warn { background: var(--color-background-warning); color: var(--color-text-warning); border-color: transparent; }
+
+.section-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--color-text-secondary);
+  margin-bottom: 10px; margin-top: 20px;
+}
+
+/* ARCHITECTURE GRID */
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.arch-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px 16px;
+  transition: border-color 0.15s;
+}
+.arch-card:hover { border-color: var(--color-border-secondary); }
+.arch-icon { font-size: 16px; margin-bottom: 6px; }
+.arch-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.arch-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+
+/* FEATURE TABLE */
+.feat-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.feat-table th {
+  text-align: left; font-weight: 500; font-size: 11px; letter-spacing: 0.5px;
+  color: var(--color-text-secondary); text-transform: uppercase;
+  padding: 0 10px 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.feat-table td {
+  padding: 10px 10px 10px 0;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.feat-table tr:last-child td { border-bottom: none; }
+.feat-name { font-weight: 500; color: var(--color-text-primary); }
+.feat-desc { color: var(--color-text-secondary); }
+.badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 20px;
+  white-space: nowrap;
+}
+.badge.google { background: var(--color-background-info); color: var(--color-text-info); }
+.badge.ai { background: var(--color-background-warning); color: var(--color-text-warning); }
+.badge.unique { background: var(--color-background-success); color: var(--color-text-success); }
+.badge.core { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
+
+/* DAY PLANNER */
+.days { display: flex; flex-direction: column; gap: 10px; }
+.day-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.day-label {
+  font-size: 12px; font-weight: 500;
+  color: var(--color-text-secondary);
+  padding-top: 12px;
+  text-align: right;
+}
+.day-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 12px 14px;
+}
+.day-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+.day-tasks { display: flex; flex-direction: column; gap: 4px; }
+.task-item {
+  font-size: 12px; color: var(--color-text-secondary);
+  display: flex; align-items: flex-start; gap: 6px; line-height: 1.5;
+}
+.task-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--color-border-secondary);
+  flex-shrink: 0; margin-top: 6px;
+}
+.day-output {
+  margin-top: 8px; padding-top: 8px;
+  border-top: 0.5px solid var(--color-border-tertiary);
+  font-size: 11px; color: var(--color-text-secondary);
+}
+.day-output span { font-weight: 500; color: var(--color-text-primary); }
+
+/* DIFFERENTIATORS */
+.diff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+.diff-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px 16px;
+}
+.diff-emoji { font-size: 20px; margin-bottom: 8px; }
+.diff-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.diff-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.55; }
+
+/* TECH STACK */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.stack-item {
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.stack-cat { font-weight: 500; margin-bottom: 4px; color: var(--color-text-primary); }
+.stack-val { color: var(--color-text-secondary); line-height: 1.5; }
+</style>
+
+<div class="plan-root">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-title">🗳️ ElectED 2.0 — Full-Scale Competition Submission</div>
+    <div class="hero-sub">An intelligent, civic education platform. Not just a chatbot — a living civic companion with Google integration, real election data, personalized voter journeys, and community features.</div>
+    <div class="tag-row">
+      <span class="tag blue">React + TypeScript</span>
+      <span class="tag blue">Google Gemini API</span>
+      <span class="tag blue">Firebase / Firestore</span>
+      <span class="tag green">Unique among submissions</span>
+      <span class="tag warn">6-day delivery plan</span>
+    </div>
+  </div>
+
+  <!-- WHAT MAKES IT UNIQUE -->
+  <div class="section-label">What sets this apart</div>
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-emoji">🧭</div>
+      <div class="diff-title">Personalized voter journey</div>
+      <div class="diff-body">User answers 3 questions (state, election type, first-time?). App generates a custom, step-by-step action plan for their specific situation. No one else will do this.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-emoji">📡</div>
+      <div class="diff-title">Live election data</div>
+      <div class="diff-body">Pulls real polling place data, registration deadlines, and upcoming races using Google Civic Information API. Dynamic, not static.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-emoji">🗣️</div>
+      <div class="diff-title">Multi-turn AI with memory</div>
+      <div class="diff-body">Gemini-powered assistant remembers context across the session, detects confusion, and proactively suggests related topics. Feels like a conversation, not a search.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-emoji">📊</div>
+      <div class="diff-title">Visual explainers</div>
+      <div class="diff-body">Interactive animated diagrams for complex topics: how Electoral College math works, vote counting flow, redistricting impact. No competitor will have these.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-emoji">📅</div>
+      <div class="diff-title">Google Calendar integration</div>
+      <div class="diff-body">One-click export of personal election deadlines to Google Calendar with smart reminders. A deeply useful, evaluator-visible Google Service integration.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-emoji">🌍</div>
+      <div class="diff-title">Multilingual civic access</div>
+      <div class="diff-body">Google Translate API integration makes content accessible in 10+ languages. Directly addresses accessibility and inclusion — an evaluation criterion.</div>
+    </div>
+  </div>
+
+  <!-- FEATURES BREAKDOWN -->
+  <div class="section-label">Feature map</div>
+  <table class="feat-table">
+    <thead>
+      <tr>
+        <th style="width:30%">Feature</th>
+        <th style="width:40%">What it does</th>
+        <th style="width:30%">Service / Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="feat-name">AI Civic Guide</span></td>
+        <td><span class="feat-desc">Multi-turn chat, remembers session context, topic suggestions, nonpartisan enforced via system prompt</span></td>
+        <td><span class="badge ai">Gemini 1.5 Flash</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">My Voter Journey</span></td>
+        <td><span class="feat-desc">Onboarding quiz → personalized checklist with deadlines specific to user's state and situation</span></td>
+        <td><span class="badge unique">Unique differentiator</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Polling Place Finder</span></td>
+        <td><span class="feat-desc">Address input → Google Maps embed showing nearest polling locations with hours</span></td>
+        <td><span class="badge google">Google Civic API + Maps</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Calendar Export</span></td>
+        <td><span class="feat-desc">Export registration deadline, election day, early voting window to Google Calendar with auto-reminders</span></td>
+        <td><span class="badge google">Google Calendar API</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Interactive Timeline</span></td>
+        <td><span class="feat-desc">Animated election cycle from candidacy to inauguration. Click each phase to expand details</span></td>
+        <td><span class="badge core">Core education</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Visual Explainers</span></td>
+        <td><span class="feat-desc">Interactive Electoral College map, vote counting flow diagram, how primaries work — animated SVG</span></td>
+        <td><span class="badge unique">Unique differentiator</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Knowledge Quiz</span></td>
+        <td><span class="feat-desc">15-question adaptive quiz, difficulty increases with score, detailed explanations for wrong answers</span></td>
+        <td><span class="badge core">Core education</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Searchable Glossary</span></td>
+        <td><span class="feat-desc">35+ terms with category filters, related term links, audio-style pronunciation hints</span></td>
+        <td><span class="badge core">Core education</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Multilingual Mode</span></td>
+        <td><span class="feat-desc">Translate all UI content into 10+ languages. Makes the app genuinely accessible</span></td>
+        <td><span class="badge google">Google Translate API</span></td>
+      </tr>
+      <tr>
+        <td><span class="feat-name">Save Progress</span></td>
+        <td><span class="feat-desc">Firebase Firestore saves user's checklist progress, quiz scores, and visited topics between sessions</span></td>
+        <td><span class="badge google">Firebase + Firestore</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TECH STACK -->
+  <div class="section-label">Technology stack</div>
+  <div class="stack-grid">
+    <div class="stack-item">
+      <div class="stack-cat">Frontend</div>
+      <div class="stack-val">React 18, TypeScript, Vite, React Router</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">Styling</div>
+      <div class="stack-val">Tailwind CSS, Framer Motion (animations)</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">AI</div>
+      <div class="stack-val">Google Gemini 1.5 Flash via @google/generative-ai</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">Backend</div>
+      <div class="stack-val">Firebase Functions (API key proxy), Firestore</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">Google APIs</div>
+      <div class="stack-val">Civic Info, Maps JS, Calendar, Translate</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">Auth</div>
+      <div class="stack-val">Firebase Auth (Google Sign-In, optional)</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">Hosting</div>
+      <div class="stack-val">Firebase Hosting or GitHub Pages</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-cat">Testing</div>
+      <div class="stack-val">Vitest + React Testing Library</div>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div class="section-label">System modules</div>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-icon">🏠</div>
+      <div class="arch-name">Landing / Onboarding</div>
+      <div class="arch-desc">3-step quiz captures state, election interest, voter experience → stores in context</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">🗺️</div>
+      <div class="arch-name">Dashboard</div>
+      <div class="arch-desc">Personal checklist, upcoming deadlines, quick links to all modules, AI nudges</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">💬</div>
+      <div class="arch-name">AI Chat Module</div>
+      <div class="arch-desc">Full conversation UI, session memory, quick-chip suggestions, sources footer</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">📍</div>
+      <div class="arch-name">Voter Tools</div>
+      <div class="arch-desc">Polling place finder (Google Maps), registration link, absentee request guide</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">📚</div>
+      <div class="arch-name">Education Hub</div>
+      <div class="arch-desc">Timeline, voting steps, visual explainers, quiz, glossary — all in one section</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon">⚙️</div>
+      <div class="arch-name">Settings / Accessibility</div>
+      <div class="arch-desc">Language selector, font size, high-contrast toggle, save preferences</div>
+    </div>
+  </div>
+
+  <!-- 6-DAY PLAN -->
+  <div class="section-label">6-day delivery plan</div>
+  <div class="days">
+
+    <div class="day-row">
+      <div class="day-label">Day 1</div>
+      <div class="day-card">
+        <div class="day-title">Foundation & Architecture</div>
+        <div class="day-tasks">
+          <div class="task-item"><span class="task-dot"></span>Scaffold React + TypeScript + Vite project, configure Tailwind and ESLint</div>
+          <div class="task-item"><span class="task-dot"></span>Set up React Router with all 6 routes stubbed out</div>
+          <div class="task-item"><span class="task-dot"></span>Create Firebase project, enable Firestore + Hosting</div>
+          <div class="task-item"><span class="task-dot"></span>Build design system: tokens, typography, color variables, reusable components (Button, Card, Badge)</div>
+          <div class="task-item"><span class="task-dot"></span>Build sidebar nav + mobile header + responsive layout shell</div>
+          <div class="task-item"><span class="task-dot"></span>Push initial skeleton to GitHub with CI setup</div>
+        </div>
+        <div class="day-output">✅ End of day: <span>Working skeleton deploys to Firebase Hosting. All routes navigate. Design system in place.</span></div>
+      </div>
+    </div>
+
+    <div class="day-row">
+      <div class="day-label">Day 2</div>
+      <div class="day-card">
+        <div class="day-title">Onboarding + Dashboard + AI Chat</div>
+        <div class="day-tasks">
+          <div class="task-item"><span class="task-dot"></span>Build onboarding quiz (state selector, election type, experience level) — stores to Firestore</div>
+          <div class="task-item"><span class="task-dot"></span>Build personalized dashboard: dynamic checklist based on user state, deadline countdown cards</div>
+          <div class="task-item"><span class="task-dot"></span>Integrate Google Gemini API via Firebase Function proxy (keeps API key secure)</div>
+          <div class="task-item"><span class="task-dot"></span>Build full AI chat UI: message bubbles, typing indicator, quick-chip prompts, conversation history</div>
+          <div class="task-item"><span class="task-dot"></span>Write and test nonpartisan system prompt, verify refusal of partisan questions</div>
+        </div>
+        <div class="day-output">✅ End of day: <span>Users can onboard, see a personalized dashboard, and have a full AI conversation.</span></div>
+      </div>
+    </div>
+
+    <div class="day-row">
+      <div class="day-label">Day 3</div>
+      <div class="day-card">
+        <div class="day-title">Google Civic API + Maps + Calendar</div>
+        <div class="day-tasks">
+          <div class="task-item"><span class="task-dot"></span>Integrate Google Civic Information API: fetch polling places and election info by address</div>
+          <div class="task-item"><span class="task-dot"></span>Build Voter Tools page: address input → Maps embed showing polling locations</div>
+          <div class="task-item"><span class="task-dot"></span>Implement Google Calendar integration: generate .ics file + direct "Add to Google Calendar" deeplink for each deadline</div>
+          <div class="task-item"><span class="task-dot"></span>Add Translate API toggle in Settings: translate key UI strings to 10 supported languages</div>
+          <div class="task-item"><span class="task-dot"></span>Handle API error states and loading states gracefully throughout</div>
+        </div>
+        <div class="day-output">✅ End of day: <span>All Google API integrations working. Polling finder live. Calendar export works. Language toggle works.</span></div>
+      </div>
+    </div>
+
+    <div class="day-row">
+      <div class="day-label">Day 4</div>
+      <div class="day-card">
+        <div class="day-title">Education Hub — Timeline, Quiz, Glossary + Visual Explainers</div>
+        <div class="day-tasks">
+          <div class="task-item"><span class="task-dot"></span>Build animated Election Timeline (Framer Motion scroll-triggered reveal)</div>
+          <div class="task-item"><span class="task-dot"></span>Build adaptive quiz engine: 15 questions, difficulty scoring, explanations, score persistence in Firestore</div>
+          <div class="task-item"><span class="task-dot"></span>Build searchable Glossary with 35+ terms, category filters, related term linking</div>
+          <div class="task-item"><span class="task-dot"></span>Build 2 interactive SVG visual explainers: Electoral College vote calculator + vote counting process flow</div>
+          <div class="task-item"><span class="task-dot"></span>Build 8-step Voting Guide cards with state-specific notes</div>
+        </div>
+        <div class="day-output">✅ End of day: <span>Full Education Hub complete. All 5 sections working. Interactive visualizations rendering.</span></div>
+      </div>
+    </div>
+
+    <div class="day-row">
+      <div class="day-label">Day 5</div>
+      <div class="day-card">
+        <div class="day-title">Polish, Accessibility, Testing + Security</div>
+        <div class="day-tasks">
+          <div class="task-item"><span class="task-dot"></span>Accessibility audit: keyboard navigation, ARIA labels, color contrast (WCAG AA), screen reader test</div>
+          <div class="task-item"><span class="task-dot"></span>Security: move all API keys to Firebase env vars, add input sanitization, validate all user input</div>
+          <div class="task-item"><span class="task-dot"></span>Write unit tests with Vitest: AI chat utility functions, quiz engine, data helpers — target 80% coverage on core logic</div>
+          <div class="task-item"><span class="task-dot"></span>Mobile responsive QA: test every view at 375px, 768px, 1280px</div>
+          <div class="task-item"><span class="task-dot"></span>Performance: lazy-load routes, compress assets, verify Lighthouse score ≥ 85</div>
+          <div class="task-item"><span class="task-dot"></span>Animation polish pass: stagger reveals, micro-interactions on hover</div>
+        </div>
+        <div class="day-output">✅ End of day: <span>App is polished, tested, accessible, and secure. Lighthouse 85+. All known bugs fixed.</span></div>
+      </div>
+    </div>
+
+    <div class="day-row">
+      <div class="day-label">Day 6</div>
+      <div class="day-card">
+        <div class="day-title">Final Deploy, README + Submission</div>
+        <div class="day-tasks">
+          <div class="task-item"><span class="task-dot"></span>Final deploy to Firebase Hosting, verify live URL works end-to-end</div>
+          <div class="task-item"><span class="task-dot"></span>Write comprehensive README: approach, architecture diagram, setup instructions, Google Services doc, assumptions</div>
+          <div class="task-item"><span class="task-dot"></span>Record a 2-minute Loom walkthrough of all features (optional but impressive)</div>
+          <div class="task-item"><span class="task-dot"></span>Verify repo: public, single branch, under 10MB, all files committed cleanly</div>
+          <div class="task-item"><span class="task-dot"></span>Final review against all 6 evaluation criteria — ensure each one is explicitly addressed in README</div>
+          <div class="task-item"><span class="task-dot"></span>Submit before deadline with live URL + repo link</div>
+        </div>
+        <div class="day-output">✅ End of day: <span>Submitted. Live URL + GitHub repo ready. Loom walkthrough linked in README.</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
