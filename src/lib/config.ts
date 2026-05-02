@@ -19,8 +19,8 @@ function normalizeEnvValue(value: string | undefined): string {
 }
 
 export const appConfig = {
-  geminiApiKey: normalizeEnvValue(env.VITE_GEMINI_API_KEY),
-  geminiModel: normalizeEnvValue(env.VITE_GEMINI_MODEL) || 'gemini-1.5-flash',
+  groqApiKey: normalizeEnvValue(env.VITE_GROQ_API_KEY),
+  groqModel: normalizeEnvValue(env.VITE_GROQ_MODEL) || 'llama-3.1-70b-versatile',
   googleCivicApiKey: normalizeEnvValue(env.VITE_GOOGLE_CIVIC_API_KEY),
   firebaseApiKey: normalizeEnvValue(env.VITE_FIREBASE_API_KEY),
   firebaseAuthDomain: normalizeEnvValue(env.VITE_FIREBASE_AUTH_DOMAIN),
@@ -30,5 +30,5 @@ export const appConfig = {
   firebaseAppId: normalizeEnvValue(env.VITE_FIREBASE_APP_ID),
 };
 
-export const hasGeminiKey = () => hasValue(appConfig.geminiApiKey);
+export const hasGroqKey = () => hasValue(appConfig.groqApiKey);
 export const hasCivicKey = () => hasValue(appConfig.googleCivicApiKey);

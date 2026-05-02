@@ -1,3 +1,4 @@
+- Later live integrations will need Firebase, Groq, Google Civic Information, Google Maps, Google Calendar, and Translate credentials.
 # Updates
 
 ## What we did so far
@@ -38,4 +39,4 @@
 
 ## API keys
 - No API keys are needed for the current build because the Google civic, maps, calendar, and chat flows are mocked locally.
-- Later live integrations will need Firebase, Gemini, Google Civic Information, Google Maps, Google Calendar, and Translate credentials.
+- Later live integrations will need Firebase, Groq, Google Civic Information, Google Maps, Google Calendar, and Translate credentials.

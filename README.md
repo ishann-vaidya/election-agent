@@ -1,3 +1,4 @@
+The project is designed to work even when API keys are missing. In that case it uses local fallback data so the UI still works. Chat can use Groq and polling lookup can use live Google Civic data when you add keys, while maps and translation now use built-in no-key fallbacks.
 # ElectED 2.0
 
 ElectED 2.0 is a civic guidance app built with React, TypeScript, and Vite. It helps people understand voting in simple words, build a personalized voting checklist, ask a nonpartisan civic assistant questions, look up polling places, export reminders, and learn the basics with quizzes and visual explainers.
@@ -56,8 +57,8 @@ Create a file named `.env.local` in the project root and add the values from `.e
 
 The app reads these variables:
 
-- `VITE_GEMINI_API_KEY`
-- `VITE_GEMINI_MODEL`
+- `VITE_GROQ_API_KEY`
+- `VITE_GROQ_MODEL`
 - `VITE_GOOGLE_CIVIC_API_KEY`
 - `VITE_FIREBASE_API_KEY`
 - `VITE_FIREBASE_AUTH_DOMAIN`
@@ -66,7 +67,7 @@ The app reads these variables:
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
 - `VITE_FIREBASE_APP_ID`
 
-If you do not add keys, the app will keep using local fallback content. Maps and translation do not require extra keys.
+If you do not add keys, the app will keep using local fallback content. Groq is used for chat when present, and maps and translation do not require extra keys.
 
 ## Project structure
 

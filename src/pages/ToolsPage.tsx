@@ -147,7 +147,7 @@ export function ToolsPage() {
         </Card>
         <Card eyebrow="API note" title="What still needs keys">
           <p>
-            Add Google Civic, Gemini, and Firebase values in <code>.env.local</code>. Maps and translation now use built-in no-key fallbacks.
+            Add Google Civic, Groq, and Firebase values in <code>.env.local</code>. Maps and translation now use built-in no-key fallbacks.
           </p>
           <Badge tone="green">Ready for keys</Badge>
         </Card>

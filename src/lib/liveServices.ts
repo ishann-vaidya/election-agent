@@ -1,17 +1,11 @@
-import { appConfig, hasCivicKey, hasGeminiKey } from './config';
-import {
-  buildAssistantReply,
-  buildMapUrl,
-  buildPollingPlaces,
-  type PollingPlace,
-  type UserProfile,
-} from './electionPlanner';
+import { appConfig, hasCivicKey, hasGroqKey } from './config';
+import { buildAssistantReply, buildMapUrl, buildPollingPlaces, type PollingPlace, type UserProfile } from './electionPlanner';
 import type { ChatMessage } from './storage';
 
-type GeminiResponse = {
-  candidates?: Array<{
-    content?: {
-      parts?: Array<{ text?: string }>;
+type GroqResponse = {
+  choices?: Array<{
+    message?: {
+      content?: string;
     };
   }>;
 };
@@ -59,49 +53,45 @@ function electionTypeLabel(profile: UserProfile) {
 export async function getAssistantReply(messages: ChatMessage[], profile: UserProfile): Promise<string> {
   const latestUserMessage = [...messages].reverse().find((message) => message.role === 'user')?.content ?? '';
 
-  if (!hasGeminiKey()) {
+  if (!hasGroqKey()) {
     return buildAssistantReply(latestUserMessage, profile);
   }
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${appConfig.geminiModel}:generateContent?key=${appConfig.geminiApiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [
-              {
-                text: [
-                  'You are ElectED 2.0, a nonpartisan civic guide for India.',
-                  'Help with registration, voting logistics, deadlines, polling places, and election basics.',
-                  'Do not recommend a party or candidate.',
-                  `The user profile is for ${profile.state}, ${electionTypeLabel(profile)}, and a ${profile.experience} voter.`,
-                ].join(' '),
-              },
-            ],
-          },
-          contents: messages.map((message) => ({
-            role: message.role === 'assistant' ? 'model' : 'user',
-            parts: [{ text: message.content }],
-          })),
-          generationConfig: {
-            temperature: 0.4,
-            maxOutputTokens: 450,
-          },
-        }),
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${appConfig.groqApiKey}`,
       },
-    );
+      body: JSON.stringify({
+        model: appConfig.groqModel,
+        messages: [
+          {
+            role: 'system',
+            content: [
+              'You are ElectED 2.0, a nonpartisan civic guide for India.',
+              'Help with registration, voting logistics, deadlines, polling places, and election basics.',
+              'Do not recommend a party or candidate.',
+              `The user profile is for ${profile.state}, ${electionTypeLabel(profile)}, and a ${profile.experience} voter.`,
+            ].join(' '),
+          },
+          ...messages.map((message) => ({
+            role: message.role === 'assistant' ? 'assistant' : 'user',
+            content: message.content,
+          })),
+        ],
+        temperature: 0.4,
+        max_tokens: 450,
+      }),
+    });
 
     if (!response.ok) {
-      throw new Error(`Gemini request failed with ${response.status}`);
+      throw new Error(`Groq request failed with ${response.status}`);
     }
 
-    const data = (await response.json()) as GeminiResponse;
-    const reply = data.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('').trim();
+    const data = (await response.json()) as GroqResponse;
+    const reply = data.choices?.[0]?.message?.content?.trim();
 
     return reply || buildAssistantReply(latestUserMessage, profile);
   } catch {

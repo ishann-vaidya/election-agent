@@ -132,9 +132,9 @@ export function ChatPage() {
             <Badge tone="blue">Session state</Badge>
             <p>The current session keeps your saved civic profile and conversation history.</p>
           </Card>
-          <Card eyebrow="API status" title="Gemini integration">
+          <Card eyebrow="API status" title="Groq integration">
             <Badge tone="green">API key ready</Badge>
-            <p>Add your Gemini key in the root <code>.env.local</code> file to switch from the local fallback reply generator to live responses.</p>
+            <p>Add your Groq key in the root <code>.env.local</code> file to switch from the local fallback reply generator to live responses.</p>
           </Card>
         </section>
       </section>
