@@ -3,12 +3,36 @@ import type { UserProfile } from './electionPlanner';
 const PROFILE_KEY = 'elected-profile';
 const PROGRESS_KEY = 'elected-progress';
 const CHAT_KEY = 'elected-chat-history';
+const PREFERENCES_KEY = 'elected-preferences';
 
 export type ProgressState = Record<string, boolean>;
+
+export type LanguageCode = 'en' | 'hi' | 'mr' | 'gu' | 'bn' | 'ta' | 'te' | 'kn' | 'ml' | 'pa';
+
+export type FontScale = 'normal' | 'large' | 'x-large';
+
+export type PreferencesState = {
+  language: LanguageCode;
+  contrast: 'standard' | 'high';
+  fontScale: FontScale;
+};
 
 export type ChatMessage = {
   role: 'user' | 'assistant';
   content: string;
+};
+
+const DEFAULT_PROFILE: UserProfile = {
+  state: 'Maharashtra',
+  electionType: 'general',
+  goal: 'Register to vote',
+  experience: 'first-time',
+};
+
+const DEFAULT_PREFERENCES: PreferencesState = {
+  language: 'en',
+  contrast: 'standard',
+  fontScale: 'normal',
 };
 
 function readJson<T>(key: string, fallback: T): T {
@@ -45,15 +69,15 @@ export function loadStoredProfile(): UserProfile | null {
   }
 
   return {
+    ...DEFAULT_PROFILE,
     ...profile,
-    state: 'Maharashtra',
   };
 }
 
 export function saveStoredProfile(profile: UserProfile) {
   writeJson(PROFILE_KEY, {
+    ...DEFAULT_PROFILE,
     ...profile,
-    state: 'Maharashtra',
   });
 }
 
@@ -71,4 +95,15 @@ export function loadStoredChat(): ChatMessage[] {
 
 export function saveStoredChat(messages: ChatMessage[]) {
   writeJson(CHAT_KEY, messages);
+}
+
+export function loadStoredPreferences(): PreferencesState {
+  return {
+    ...DEFAULT_PREFERENCES,
+    ...readJson<Partial<PreferencesState>>(PREFERENCES_KEY, {}),
+  };
+}
+
+export function saveStoredPreferences(preferences: PreferencesState) {
+  writeJson(PREFERENCES_KEY, preferences);
 }

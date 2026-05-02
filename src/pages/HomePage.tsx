@@ -40,7 +40,7 @@ export function HomePage() {
             The current mock flow is scoped to Maharashtra so the content stays consistent while the live integrations are built later.
           </p>
         </Card>
-        <Card eyebrow="What comes next" title="Connect live services later">
+        <Card eyebrow="Future integrations" title="Connect live services later">
           <p>
             Firebase and Google APIs can be added after the core experience is stable.
           </p>

@@ -1,7 +1,10 @@
 export type ExperienceLevel = 'first-time' | 'returning' | 'absentee';
 
+export type ElectionType = 'general' | 'state-assembly' | 'local-body';
+
 export type UserProfile = {
   state: string;
+  electionType: ElectionType;
   goal: string;
   experience: ExperienceLevel;
 };
@@ -29,6 +32,16 @@ export type CivicPlan = {
 
 export const STATE_OPTIONS = [
   'Maharashtra',
+  'Karnataka',
+  'Delhi',
+  'Tamil Nadu',
+  'Gujarat',
+];
+
+export const ELECTION_TYPE_OPTIONS: Array<{ value: ElectionType; label: string }> = [
+  { value: 'general', label: 'General election' },
+  { value: 'state-assembly', label: 'State assembly election' },
+  { value: 'local-body', label: 'Local body election' },
 ];
 
 export const GOAL_OPTIONS = [
@@ -47,7 +60,71 @@ export const EXPERIENCE_OPTIONS: Array<{ value: ExperienceLevel; label: string }
 const planMap: Record<string, CivicPlan> = {
   Maharashtra: {
     title: 'Maharashtra civic path',
-    summary: 'Learn how to verify your voter record, find your booth, and plan voting day.',
+    summary: 'Learn how to verify your voter record, find your booth, and plan voting day in Maharashtra.',
+    checklist: [
+      'Confirm your name and address in the electoral roll',
+      'Check your polling booth and ward details',
+      'Save the local election office or helpline number',
+      'Review the documents you should carry to the booth',
+    ],
+    deadlines: [
+      { label: 'Roll verification', date: '2026-09-15', detail: 'Check that your voter details are correct before the election period.' },
+      { label: 'Booth planning', date: '2026-10-15', detail: 'Save the polling station address and travel plan.' },
+      { label: 'Voting day', date: '2026-11-03', detail: 'Keep the day free and recheck your booth before you leave.' },
+    ],
+    learningPillars: ['Voter roll basics', 'Booth lookup', 'Voting day planning'],
+  },
+  Karnataka: {
+    title: 'Karnataka civic path',
+    summary: 'Learn how to verify your voter record, find your booth, and plan voting day in Karnataka.',
+    checklist: [
+      'Confirm your name and address in the electoral roll',
+      'Check your polling booth and ward details',
+      'Save the local election office or helpline number',
+      'Review the documents you should carry to the booth',
+    ],
+    deadlines: [
+      { label: 'Roll verification', date: '2026-09-15', detail: 'Check that your voter details are correct before the election period.' },
+      { label: 'Booth planning', date: '2026-10-15', detail: 'Save the polling station address and travel plan.' },
+      { label: 'Voting day', date: '2026-11-03', detail: 'Keep the day free and recheck your booth before you leave.' },
+    ],
+    learningPillars: ['Voter roll basics', 'Booth lookup', 'Voting day planning'],
+  },
+  Delhi: {
+    title: 'Delhi civic path',
+    summary: 'Learn how to verify your voter record, find your booth, and plan voting day in Delhi.',
+    checklist: [
+      'Confirm your name and address in the electoral roll',
+      'Check your polling booth and ward details',
+      'Save the local election office or helpline number',
+      'Review the documents you should carry to the booth',
+    ],
+    deadlines: [
+      { label: 'Roll verification', date: '2026-09-15', detail: 'Check that your voter details are correct before the election period.' },
+      { label: 'Booth planning', date: '2026-10-15', detail: 'Save the polling station address and travel plan.' },
+      { label: 'Voting day', date: '2026-11-03', detail: 'Keep the day free and recheck your booth before you leave.' },
+    ],
+    learningPillars: ['Voter roll basics', 'Booth lookup', 'Voting day planning'],
+  },
+  'Tamil Nadu': {
+    title: 'Tamil Nadu civic path',
+    summary: 'Learn how to verify your voter record, find your booth, and plan voting day in Tamil Nadu.',
+    checklist: [
+      'Confirm your name and address in the electoral roll',
+      'Check your polling booth and ward details',
+      'Save the local election office or helpline number',
+      'Review the documents you should carry to the booth',
+    ],
+    deadlines: [
+      { label: 'Roll verification', date: '2026-09-15', detail: 'Check that your voter details are correct before the election period.' },
+      { label: 'Booth planning', date: '2026-10-15', detail: 'Save the polling station address and travel plan.' },
+      { label: 'Voting day', date: '2026-11-03', detail: 'Keep the day free and recheck your booth before you leave.' },
+    ],
+    learningPillars: ['Voter roll basics', 'Booth lookup', 'Voting day planning'],
+  },
+  Gujarat: {
+    title: 'Gujarat civic path',
+    summary: 'Learn how to verify your voter record, find your booth, and plan voting day in Gujarat.',
     checklist: [
       'Confirm your name and address in the electoral roll',
       'Check your polling booth and ward details',
@@ -63,13 +140,51 @@ const planMap: Record<string, CivicPlan> = {
   },
 };
 
+function createFallbackPlan(profile: UserProfile): CivicPlan {
+  const electionTypeLabel =
+    profile.electionType === 'state-assembly'
+      ? 'state assembly election'
+      : profile.electionType === 'local-body'
+        ? 'local body election'
+        : 'general election';
+
+  return {
+    title: `${profile.state} civic path`,
+    summary: `Learn how to verify your voter record, find your booth, and plan voting day for your ${electionTypeLabel}.`,
+    checklist: [
+      'Confirm your name and address in the electoral roll',
+      'Check your polling booth and ward details',
+      'Save the local election office or helpline number',
+      'Review the documents you should carry to the booth',
+    ],
+    deadlines: [
+      { label: 'Roll verification', date: '2026-09-15', detail: 'Check that your voter details are correct before the election period.' },
+      { label: 'Booth planning', date: '2026-10-15', detail: 'Save the polling station address and travel plan.' },
+      { label: 'Voting day', date: '2026-11-03', detail: 'Keep the day free and recheck your booth before you leave.' },
+    ],
+    learningPillars: ['Voter roll basics', 'Booth lookup', 'Voting day planning'],
+  };
+}
+
 export function buildCivicPlan(profile: UserProfile): CivicPlan {
-  return planMap.Maharashtra;
+  return planMap[profile.state] ?? createFallbackPlan(profile);
 }
 
 export function buildChecklist(profile: UserProfile): string[] {
   const plan = buildCivicPlan(profile);
   const checklist = [...plan.checklist];
+
+  if (profile.electionType === 'general') {
+    checklist.unshift('Review the national election timeline and the main dates that affect your area');
+  }
+
+  if (profile.electionType === 'state-assembly') {
+    checklist.unshift(`Check the ${profile.state} assembly schedule and ballot details`);
+  }
+
+  if (profile.electionType === 'local-body') {
+    checklist.unshift('Confirm your ward, council, and local body polling details');
+  }
 
   if (profile.goal === 'Learn the basics') {
     checklist.unshift('Read the guided overview of how voting works in your state');
@@ -97,22 +212,23 @@ export function buildDeadlines(profile: UserProfile): DeadlineItem[] {
 
 export function buildPollingPlaces(profile: UserProfile, address: string): PollingPlace[] {
   const baseAddress = address.trim() || 'Maharashtra voter address';
+  const stateName = profile.state || 'Maharashtra';
 
   return [
     {
-      name: 'Mumbai South Polling Booth',
+      name: `${stateName} South Polling Booth`,
       address: `${baseAddress} - Central civic school`,
       hours: '7:00 AM - 6:00 PM',
       distance: '1.2 km',
     },
     {
-      name: 'Pune Cantonment Booth',
+      name: `${stateName} Cantonment Booth`,
       address: `${baseAddress} - Municipal community hall`,
       hours: '7:00 AM - 6:00 PM',
       distance: '2.8 km',
     },
     {
-      name: 'Nagpur Ward Office Booth',
+      name: `${stateName} Ward Office Booth`,
       address: `${baseAddress} - Ward office campus`,
       hours: '7:00 AM - 6:00 PM',
       distance: '3.4 km',
@@ -155,14 +271,20 @@ export function buildMapUrl(profile: UserProfile, address: string): string {
 
 export function buildAssistantReply(message: string, profile: UserProfile | null): string {
   const normalized = message.toLowerCase();
-  const state = 'Maharashtra';
+  const state = profile?.state ?? 'Maharashtra';
+  const electionType =
+    profile?.electionType === 'state-assembly'
+      ? 'state assembly election'
+      : profile?.electionType === 'local-body'
+        ? 'local body election'
+        : 'general election';
 
   if (normalized.includes('who should i vote for') || normalized.includes('which party should i choose')) {
     return 'I can help with registration, deadlines, and voting logistics, but I cannot recommend a candidate or party. If you want, I can explain how to compare ballot issues in ' + state + '.';
   }
 
   if (normalized.includes('first') || normalized.includes('start')) {
-    return `Start by confirming your voter roll details in ${state}, then note your polling booth and voting day plan.`;
+    return `Start by confirming your voter roll details in ${state} for your ${electionType}, then note your polling booth and voting day plan.`;
   }
 
   if (normalized.includes('absentee') || normalized.includes('mail')) {

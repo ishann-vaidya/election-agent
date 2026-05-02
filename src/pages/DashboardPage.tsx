@@ -7,6 +7,7 @@ import { loadStoredProfile, loadStoredProgress, saveStoredProgress } from '../li
 
 const fallbackProfile: UserProfile = {
   state: 'Maharashtra',
+  electionType: 'general',
   goal: 'Register to vote',
   experience: 'first-time',
 };
@@ -22,8 +23,7 @@ export function DashboardPage() {
   const plan = buildCivicPlan(profile);
   const checklist = buildChecklist(profile);
   const deadlines = buildDeadlines(profile);
-  const completedCount = checklist.filter((item) => progress[item]).length;
-  const progressPercent = checklist.length > 0 ? Math.round((completedCount / checklist.length) * 100) : 0;
+  const savedCount = checklist.filter((item) => progress[item]).length;
 
   const toggleTask = (task: string) => {
     setProgress((current) => {
@@ -41,20 +41,19 @@ export function DashboardPage() {
           <h2>{plan.title}</h2>
           <p className="hero-copy">{plan.summary}</p>
         </div>
-        <Badge tone="blue">{completedCount} / {checklist.length} tasks complete</Badge>
+        <Badge tone="blue">{savedCount} checklist items saved</Badge>
       </section>
 
       <section className="card-grid compact">
         <Card eyebrow="Profile" title="Personalization snapshot">
           <p><strong>State:</strong> {profile.state}</p>
+          <p><strong>Election type:</strong> {profile.electionType}</p>
           <p><strong>Goal:</strong> {profile.goal}</p>
           <p><strong>Experience:</strong> {profile.experience}</p>
         </Card>
-        <Card eyebrow="Progress" title="Checklist completion">
-          <div className="progress-track" aria-hidden="true">
-            <span style={{ width: `${progressPercent}%` }} />
-          </div>
-          <p>{progressPercent}% complete based on the saved checklist state.</p>
+        <Card eyebrow="Checklist" title="Saved civic plan">
+          <p>{savedCount} items are marked in your local checklist state.</p>
+          <p>The app keeps this plan on the device so you can return to it later.</p>
         </Card>
       </section>
 

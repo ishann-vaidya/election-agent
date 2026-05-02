@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { buildAssistantReply, buildCivicPlan, type UserProfile } from '../lib/electionPlanner';
+import { buildCivicPlan, type UserProfile } from '../lib/electionPlanner';
+import { getAssistantReply } from '../lib/liveServices';
 import { loadStoredChat, loadStoredProfile, saveStoredChat, type ChatMessage } from '../lib/storage';
 
 const quickPrompts = [
@@ -14,6 +15,7 @@ const quickPrompts = [
 
 const fallbackProfile: UserProfile = {
   state: 'Maharashtra',
+  electionType: 'general',
   goal: 'Register to vote',
   experience: 'first-time',
 };
@@ -32,6 +34,7 @@ export function ChatPage() {
         ];
   });
   const [input, setInput] = useState('');
+  const [isThinking, setIsThinking] = useState(false);
 
   useEffect(() => {
     setProfile(loadStoredProfile() ?? fallbackProfile);
@@ -43,20 +46,24 @@ export function ChatPage() {
 
   const plan = buildCivicPlan(profile);
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     const trimmed = text.trim();
 
     if (!trimmed) {
       return;
     }
 
-    const reply = buildAssistantReply(trimmed, profile);
-    setMessages((current) => [
-      ...current,
-      { role: 'user', content: trimmed },
-      { role: 'assistant', content: reply },
-    ]);
+    const nextMessages = [...messages, { role: 'user', content: trimmed } as ChatMessage];
+    setMessages(nextMessages);
     setInput('');
+    setIsThinking(true);
+
+    try {
+      const reply = await getAssistantReply(nextMessages, profile);
+      setMessages((current) => [...current, { role: 'assistant', content: reply }]);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   return (
@@ -83,6 +90,7 @@ export function ChatPage() {
                 {message.content}
               </div>
             ))}
+            {isThinking ? <div className="chat-bubble chat-bubble-assistant">Thinking about the best civic answer...</div> : null}
           </div>
 
           <form
@@ -122,7 +130,11 @@ export function ChatPage() {
           </Card>
           <Card eyebrow="Memory" title="Context available">
             <Badge tone="blue">Session state</Badge>
-            <p>We have a Maharashtra profile for the current session.</p>
+            <p>The current session keeps your saved civic profile and conversation history.</p>
+          </Card>
+          <Card eyebrow="API status" title="Gemini integration">
+            <Badge tone="green">API key ready</Badge>
+            <p>Add your Gemini key in the root <code>.env.local</code> file to switch from the local fallback reply generator to live responses.</p>
           </Card>
         </section>
       </section>

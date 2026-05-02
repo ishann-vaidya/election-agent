@@ -6,11 +6,10 @@ import {
   buildGoogleCalendarUrl,
   buildIcsContent,
   buildMapUrl,
-  buildPollingPlaces,
-  STATE_OPTIONS,
   type UserProfile,
 } from '../lib/electionPlanner';
 import { loadStoredProfile } from '../lib/storage';
+import { buildMapsEmbedUrl, lookupPollingPlaces, type PollingLookupResult } from '../lib/liveServices';
 
 type LookupState = {
   address: string;
@@ -18,6 +17,7 @@ type LookupState = {
 
 const fallbackProfile: UserProfile = {
   state: 'Maharashtra',
+  electionType: 'general',
   goal: 'Register to vote',
   experience: 'first-time',
 };
@@ -25,15 +25,14 @@ const fallbackProfile: UserProfile = {
 export function ToolsPage() {
   const [profile, setProfile] = useState<UserProfile>(fallbackProfile);
   const [lookup, setLookup] = useState<LookupState>({ address: '' });
+  const [result, setResult] = useState<PollingLookupResult | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const savedProfile = loadStoredProfile();
     setProfile(savedProfile ?? fallbackProfile);
   }, []);
 
-  const activeProfile: UserProfile = profile;
-
-  const places = buildPollingPlaces(activeProfile, lookup.address);
   const calendarTarget = buildGoogleCalendarUrl({
     label: 'Election day reminder',
     date: '2026-11-03',
@@ -46,24 +45,46 @@ export function ToolsPage() {
       detail: 'Keep the key voting date visible in your calendar.',
     }),
   )}`;
-  const mapUrl = buildMapUrl(activeProfile, lookup.address);
+  const mapUrl = buildMapUrl(profile, lookup.address);
+  const mapEmbedUrl = buildMapsEmbedUrl(lookup.address || profile.state);
+
+  async function handleLookup() {
+    setLoading(true);
+
+    try {
+      const nextResult = await lookupPollingPlaces(profile, lookup.address);
+      setResult(nextResult);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    void handleLookup();
+  }, [profile.state]);
 
   return (
     <div className="page-stack">
       <section className="hero-panel tools-hero">
         <div>
           <p className="eyebrow">Local tools</p>
-          <h2>Find polling booths and save reminders for Maharashtra.</h2>
+          <h2>Find polling booths and save reminders for your civic plan.</h2>
           <p className="hero-copy">
-            This page works without API keys for now by showing mock polling places, a map link, and calendar export actions. Live Google APIs can be wired in later.
+            This page is ready for Google Civic, Maps, and Calendar keys. Until those are added it uses fallback local data so the UI still works.
           </p>
         </div>
-        <Badge tone="gold">Mock data only</Badge>
+        <Badge tone={result?.source === 'live' ? 'green' : 'gold'}>{result?.source === 'live' ? 'Live civic data' : 'Fallback data'}</Badge>
       </section>
 
       <section className="card-grid compact">
         <Card eyebrow="Lookup" title="Enter an address">
-          <form className="lookup-form" onSubmit={(event) => event.preventDefault()}>
+          <form
+            className="lookup-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void handleLookup();
+            }}
+          >
             <label className="field-group">
               <span>Street address</span>
               <input
@@ -73,25 +94,33 @@ export function ToolsPage() {
               />
             </label>
             <div className="inline-badges">
-              <Badge tone="blue">Maharashtra</Badge>
+              <Badge tone="blue">{profile.state}</Badge>
               <Badge tone="green">India focus</Badge>
             </div>
+            <Button type="submit" fullWidth>{loading ? 'Searching...' : 'Search polling places'}</Button>
           </form>
         </Card>
 
         <Card eyebrow="Map" title="Polling place preview">
-          <p>Open a Google Maps search link now, or wire the Maps JS API later for an embedded map.</p>
+          <p>Open a Google Maps search link now, or use the no-key embedded preview below.</p>
           <div className="hero-actions">
             <Button href={mapUrl} target="_blank" rel="noreferrer">
               Open maps search
             </Button>
           </div>
+          {mapEmbedUrl ? (
+            <iframe className="map-embed" title="Google Maps embed" src={mapEmbedUrl} loading="lazy" />
+          ) : (
+            <p className="map-note">The map preview uses a no-key Google Maps search embed.</p>
+          )}
         </Card>
       </section>
 
-      <Card eyebrow="Polling places" title="Mock civic data result set">
+      <Card eyebrow="Polling places" title={result?.electionName ? `${result.electionName}` : 'Polling place result set'}>
+        {result?.electionDay ? <p className="card-subcopy">Election day: {result.electionDay}</p> : null}
+        <p className="card-subcopy">{result?.note ?? 'Search an address to load polling place data.'}</p>
         <div className="tool-rows tool-rows-grid">
-          {places.map((place) => (
+          {(result?.places ?? []).map((place) => (
             <div key={place.name} className="tool-row tool-row-card">
               <div>
                 <strong>{place.name}</strong>
@@ -118,9 +147,9 @@ export function ToolsPage() {
         </Card>
         <Card eyebrow="API note" title="What still needs keys">
           <p>
-            Live Google Civic Information API, Maps embed, Calendar auth, and Translate calls will need your credentials.
+            Add Google Civic, Gemini, and Firebase values in <code>.env.local</code>. Maps and translation now use built-in no-key fallbacks.
           </p>
-          <Badge tone="green">Ready for future keys</Badge>
+          <Badge tone="green">Ready for keys</Badge>
         </Card>
       </section>
     </div>

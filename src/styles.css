@@ -24,6 +24,24 @@
   --radius-sm: 10px;
 }
 
+html[data-contrast='high'] {
+  --bg: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-muted: #f8fafc;
+  --text: #08111f;
+  --text-soft: #334155;
+  --line: rgba(8, 17, 31, 0.18);
+  --line-strong: rgba(8, 17, 31, 0.3);
+}
+
+html[data-font-scale='large'] {
+  font-size: 17px;
+}
+
+html[data-font-scale='x-large'] {
+  font-size: 18px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -427,6 +445,128 @@ a {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.lookup-form,
+.setting-item-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.lookup-form select,
+.lookup-form input,
+.setting-item select,
+.glossary-search input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+
+.lookup-form select:focus,
+.lookup-form input:focus,
+.setting-item select:focus,
+.glossary-search input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.card-subcopy {
+  margin: 0 0 12px;
+  color: var(--text-soft);
+}
+
+.map-embed {
+  width: 100%;
+  min-height: 240px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  margin-top: 12px;
+}
+
+.map-note {
+  color: var(--text-soft);
+  margin-top: 12px;
+}
+
+.quiz-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.quiz-feedback {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: var(--bg-muted);
+  color: var(--text-soft);
+}
+
+.quiz-feedback-correct {
+  border-color: var(--success-soft);
+  background: rgba(209, 250, 229, 0.4);
+}
+
+.quiz-feedback-wrong {
+  border-color: var(--warning-soft);
+  background: rgba(254, 243, 199, 0.4);
+}
+
+.setting-preview {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  border: 1px dashed var(--line-strong);
+  color: var(--text);
+}
+
+.explainer-svg {
+  width: 100%;
+  height: auto;
+  margin-top: 12px;
+}
+
+.explainer-line {
+  stroke: url(#journeyGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 14 10;
+  animation: dash-flow 12s linear infinite;
+}
+
+.explainer-node {
+  fill: var(--bg-elevated);
+  stroke: var(--primary);
+  stroke-width: 4;
+}
+
+.explainer-box {
+  fill: var(--bg-elevated);
+  stroke: var(--line-strong);
+  stroke-width: 2;
+}
+
+.explainer-text {
+  fill: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@keyframes dash-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -240;
+  }
 }
 
 .choice-grid {
@@ -837,5 +977,9 @@ a.button {
   .choice-chip,
   .tool-row-card {
     padding: 14px;
+  }
+
+  .quiz-item-head {
+    flex-direction: column;
   }
 }
