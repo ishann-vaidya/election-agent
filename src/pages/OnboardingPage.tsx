@@ -25,12 +25,10 @@ const initialProfile: UserProfile = loadStoredProfile() ?? {
 export function OnboardingPage() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile>(initialProfile);
-  const [saved, setSaved] = useState(Boolean(loadStoredProfile()));
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     saveStoredProfile(profile);
-    setSaved(true);
     navigate('/dashboard');
   };
 

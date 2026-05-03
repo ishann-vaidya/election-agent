@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { buildCivicPlan, type UserProfile } from '../lib/electionPlanner';
+import { type UserProfile } from '../lib/electionPlanner';
 import { getAssistantReply } from '../lib/liveServices';
 import { loadStoredChat, loadStoredProfile, saveStoredChat, type ChatMessage } from '../lib/storage';
 
@@ -43,8 +43,6 @@ export function ChatPage() {
   useEffect(() => {
     saveStoredChat(messages);
   }, [messages]);
-
-  const plan = buildCivicPlan(profile);
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();

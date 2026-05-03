@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge } from '../components/ui/Badge';
 import { Card } from '../components/ui/Card';
 import { translateSnippet } from '../lib/liveServices';
@@ -45,8 +45,6 @@ export function SettingsPage() {
       active = false;
     };
   }, [preferences.language]);
-
-  const languageName = useMemo(() => languageLabels[preferences.language], [preferences.language]);
 
   return (
     <div className="page-stack">
